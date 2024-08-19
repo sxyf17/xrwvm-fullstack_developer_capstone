@@ -20,7 +20,7 @@ class CarMake(models.Model):
 
 class CarModel(models.Model):
     car_make = models.ForeignKey(
-        CarMake, 
+        CarMake,
         on_delete=models.CASCADE
     )  # Many-to-One relationship
 
@@ -32,8 +32,8 @@ class CarModel(models.Model):
         ('WAGON', 'Wagon'),
     ]
     type = models.CharField(
-        max_length=10, 
-        choices=CAR_TYPES, 
+        max_length=10,
+        choices=CAR_TYPES,
         default='SUV'
     )
     year = models.IntegerField(
@@ -46,4 +46,3 @@ class CarModel(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.year})"
-    
