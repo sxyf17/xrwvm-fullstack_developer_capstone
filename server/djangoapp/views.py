@@ -63,10 +63,10 @@ def registration(request):
 
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, 
-                                        first_name=first_name, 
-                                        last_name=last_name, 
-                                        password=password, 
+        user = User.objects.create_user(username=username,
+                                        first_name=first_name,
+                                        last_name=last_name,
+                                        password=password,
                                         email=email)
         # Log in the user and return a success response
         login(request, user)
@@ -77,11 +77,11 @@ def registration(request):
         return JsonResponse(data)
 
 
-# Update the `get_dealerships` to render a list of dealerships by default, 
+# Update the `get_dealerships` to render a list of dealerships by default,
 # or by state if provided
 def get_dealerships(request, state="All"):
     endpoint = "/fetchDealers" if state == "All" else \
-    f"/fetchDealers/{state}"
+        f"/fetchDealers/{state}"
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
 
@@ -116,7 +116,7 @@ def add_review(request):
             post_review(data)
             return JsonResponse({"status": 200})
         except Exception as e:
-            return JsonResponse({"status": 401, "message": f"Error in 
+            return JsonResponse({"status": 401, "message": f"Error in
                                  posting review: {e}"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
