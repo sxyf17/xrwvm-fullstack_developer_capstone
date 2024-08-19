@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib.auth import login, authenticate
@@ -13,6 +12,7 @@ from .restapis import get_request, analyze_review_sentiments, post_review
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 # Create your views here.
 def get_cars(request):
     count = CarMake.objects.filter().count()
@@ -20,7 +20,8 @@ def get_cars(request):
     if count == 0:
         initiate()  # populate models with sample data
     car_models = CarModel.objects.select_related('car_make')
-    cars = [{"CarModel": car_model.name, "CarMake": car_model.car_make.name} for car_model in car_models]
+    cars = [{"CarModel": car_model.name, "CarMake": car_model.car_make.name}
+            for car_model in car_models]
     return JsonResponse({"CarModels": cars})
 
 
@@ -57,13 +58,16 @@ def registration(request):
     first_name = data['firstName']
     last_name = data['lastName']
     email = data['email']
-    
+
     username_exist = User.objects.filter(username=username).exists()
-    
+
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, 
-                                        last_name=last_name, password=password, email=email)
+        user = User.objects.create_user(username=username, 
+                                        first_name=first_name, 
+                                        last_name=last_name, 
+                                        password=password, 
+                                        email=email)
         # Log in the user and return a success response
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
@@ -73,9 +77,11 @@ def registration(request):
         return JsonResponse(data)
 
 
-# Update the `get_dealerships` to render a list of dealerships by default, or by state if provided
+# Update the `get_dealerships` to render a list of dealerships by default, 
+# or by state if provided
 def get_dealerships(request, state="All"):
-    endpoint = "/fetchDealers" if state == "All" else f"/fetchDealers/{state}"
+    endpoint = "/fetchDealers" if state == "All" else \
+    f"/fetchDealers/{state}"
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
 
@@ -110,7 +116,7 @@ def add_review(request):
             post_review(data)
             return JsonResponse({"status": 200})
         except Exception as e:
-            return JsonResponse({"status": 401, "message": f"Error in posting review: {e}"})
+            return JsonResponse({"status": 401, "message": f"Error in 
+                                 posting review: {e}"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
-    
